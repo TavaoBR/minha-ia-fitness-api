@@ -6,15 +6,15 @@ use App\Service\AuthService;
 
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
-class AuthHelpers 
+class AuthHelpers
 {
     private $authService;
-    
+
     public function __construct(AuthService $authService)
     {
-      $this->authService = $authService;
+        $this->authService = $authService;
     }
-    
+
     public function validarTokeAuth()
     {
         $headers = getallheaders();
@@ -24,8 +24,8 @@ class AuthHelpers
 
         $headers = str_replace('=', '', $headers);
 
-        
-        if (!isset($headers['x-monte-ia-fit-token'])) {
+
+        if (!isset($headers['x-api-minha-ia-fit-token'])) {
             return [
                 'statusCode' => 400,
                 'message' => 'Token inválido: cabeçalho ausente.',
@@ -33,10 +33,10 @@ class AuthHelpers
             ];
         }
 
-        $token = $headers['x-monte-ia-fit-token'];
+        $token = $headers['x-api-minha-ia-fit-token'];
         $auth = $this->authService->autenticar($token);
 
-        return $auth ? 
+        return $auth ?
             ['statusCode' => 200, 'message' => 'Autorizado.'] :
             ['statusCode' => 401, 'message' => 'Não autorizado.', 'headers' => $headers];
     }
@@ -50,18 +50,17 @@ class AuthHelpers
 
         $headers = str_replace('=', '', $headers);
 
-        if(!isset($headers['x-monte-ia-fit-token'])){
-            throw new UnauthorizedHttpException('Token inválido: cabeçalho ausente.');     
+        if (!isset($headers['x-api-minha-ia-fit-token'])) {
+            throw new UnauthorizedHttpException('Token inválido: cabeçalho ausente.');
         }
-        
-        $token = $headers['x-monte-ia-fit-token'];
+
+        $token = $headers['x-api-minha-ia-fit-token'];
         $auth = $this->authService->autenticar($token);
 
-        if($auth === false){
+        if ($auth === false) {
             throw new UnauthorizedHttpException('Token invalido');
         }
-        
-        return $auth;
 
+        return $auth;
     }
 }
