@@ -13,7 +13,7 @@ class GeminiService
         $yourApiKey = $_ENV['GEMINI_API_KEY'] ?? 'default_api_key';
         
         $client = Gemini::client($yourApiKey);
-        $resutl = $client->generativeModel(model: 'models/gemini-1.5-flash-001')->generateContent($text);
+        $resutl = $client->generativeModel(model: 'models/gemini-2.0-flash')->generateContent($text);
 
         return $resutl->text();
     }
